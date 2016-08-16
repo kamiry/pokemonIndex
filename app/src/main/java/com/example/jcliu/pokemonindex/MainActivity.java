@@ -1,7 +1,14 @@
 package com.example.jcliu.pokemonindex;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     Spinner sp;
     ImageView[] iv = new ImageView[9];
     TextView txv;
+    Uri imgUri;
 
     int[] Iv_Res = {R.id.imageView, R.id.imageView2, R.id.imageView3, R.id.imageView4, R.id.imageView5, R.id.imageView6, R.id.imageView7, R.id.imageView8, R.id.imageView9};
     String[] rarity = {"Everywhere", "Virtually Everywhere", "Very Common", "Common", "Uncommon", "Ununcommon", "Rare", "Very Rare", "Special", "Epic", "Myth", "Not Convinced It Exists"};
@@ -30,6 +38,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             {R.drawable.poke67, R.drawable.poke68, R.drawable.poke69, R.drawable.poke70},
             {R.drawable.poke71}
     };
+
+    public void onClick0(View v){
+        Log.d("poke", "take picture");
+        // directory
+        String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+        String fname = "p" + System.currentTimeMillis() + ".jpg";
+        String fullpath = "file://" + dir + "/" + fname;
+        imgUri = Uri.parse(fullpath);
+
+        Log.d("poke", fullpath);
+
+        Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(it, 100);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d("poke", "onActivityResult");
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK && requestCode == 100){
+            Log.d("poke", "Replace imageView");
+            Bundle extras = data.getExtras();
+            Bitmap bmp = (Bitmap) extras.get("data");
+            (iv[0]).setImageBitmap(bmp);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
