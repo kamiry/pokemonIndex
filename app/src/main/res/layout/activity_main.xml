@@ -43,7 +43,8 @@
                 android:layout_width="100dp"
                 android:layout_height="120dp"
                 android:id="@+id/imageView"
-                android:src="@drawable/poke1" />
+                android:src="@drawable/poke1"
+                android:onClick="onClick0" />
 
             <ImageView
                 android:layout_width="100dp"
